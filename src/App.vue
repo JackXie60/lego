@@ -1,19 +1,43 @@
 <template>
-  <h1>慕课乐高标准模版</h1>
-  <ul>
-    <li>开箱即用</li>
-    <li>typescript</li>
-    <li>Vue3</li>
-    <li>支持 tsx</li>
-    <li>eslint</li>
-    <li>简单易用可扩展</li>
-  </ul>
+  <div class="homepage-container">
+    <a-layout>
+      <a-layout-header class="header" v-if="route.meta.withHeader">
+        <div class="page-title">
+          <router-link to="/" :style="{marginRight: 'auto'}">
+            <img src="https://oss.imooc-lego.com/editor/img/logo2.cae6ad43.png" alt="">
+          </router-link>
+          <user-profile :user="user"/>
+        </div>
+      </a-layout-header>
+      <a-layout-content class="home-layout" :gutter="16">
+        <router-view></router-view>
+      </a-layout-content>
+      <a-layout-footer>@版权所有|1809697652@qq.com</a-layout-footer>
+    </a-layout>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useRoute } from 'vue-router'
+import UserProfile from './components/UserProfile.vue'
+import {useStore} from 'vuex'
+import { GlobalDataProps } from './store';
 export default defineComponent({
   name: 'App',
+  components: {
+    UserProfile
+  },
+  setup(){
+    const route = useRoute()
+    const store = useStore<GlobalDataProps>()
+
+    const user = computed(()=>store.state.user.data)
+    return {
+      route,
+      user
+    }
+  }
 });
 </script>
 
@@ -24,6 +48,15 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+  width: 100%;
+}
+:root::-webkit-scrollbar {
+  width: 0px;
+}
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
